@@ -1,0 +1,15 @@
+[Unit]
+Description=Sophia API - A股量化数据接口
+After=network.target
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/home/ubuntu/quant-auto-agent
+ExecStart=/home/ubuntu/.hermes/hermes-agent/venv/bin/python3 -m uvicorn api.main:app --host 127.0.0.1 --port 8000 --log-level info
+Restart=always
+RestartSec=5
+Environment=SOPHIA_API_TOKEN=sophia-default-token-change-me
+
+[Install]
+WantedBy=multi-user.target
