@@ -1,0 +1,85 @@
+name: iOS Build (骚飞)
+
+on:
+  push:
+    tags:
+      - 'v*'              # 打 tag 自动编译，如 v1.2.0
+  workflow_dispatch:      # 手动触发
+    inputs:
+      build_mode:
+        description: 'Build mode'
+        type: choice
+        options:
+          - release
+          - debug
+        default: release
+
+jobs:
+  build-ios:
+    name: Build iOS IPA
+    runs-on: macos-latest   # ← 必须 macOS runner，$$$
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.x'
+          cache: true
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Static analysis
+        run: flutter analyze lib/
+
+      - name: Build iOS (${{ inputs.build_mode || 'release' }})
+        run: |
+          flutter build ios --${{ inputs.build_mode || 'release' }} --no-codesign
+        env:
+          FLUTTER_BUILD_NAME: ${{ github.ref_name }}
+          FLUTTER_BUILD_NUMBER: ${{ github.run_number }}
+
+      - name: Create IPA (no-codesign — 用于 sideload)
+        if: ${{ inputs.build_mode != 'release' || success() }}
+        run: |
+          mkdir -p output
+          cd build/ios/iphoneos
+          mkdir -p Payload
+          cp -r Runner.app Payload/
+          zip -r ../../../output/sophia-ios-${{ github.ref_name || 'latest' }}.ipa Payload
+          cd ../../..
+          ls -lh output/
+
+      - name: Upload IPA artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sophia-ios-${{ github.ref_name || 'latest' }}
+          path: output/*.ipa
+          retention-days: 7
+
+  # ============================================================
+  # 备注：
+  # 正式分发需 Apple Developer Program ($99/年)
+  # 如需 App Store / TestFlight 分发，添加以下步骤：
+  #
+  # 1. 在 repo Settings → Secrets 添加：
+  #    - APP_STORE_CONNECT_API_KEY     (App Store Connect API Key)
+  #    - APP_STORE_CONNECT_ISSUER_ID   (Issuer ID)
+  #    - APP_STORE_CONNECT_KEY_ID      (Key ID)
+  #    - BUILD_CERT_BASE64             (Apple Distribution Certificate p12, base64)
+  #    - BUILD_PROVISION_PROFILE_BASE64 (Distribution Provisioning Profile)
+  #
+  # 2. 添加 fastlane 步骤：
+  #   - name: Export IPA with signing
+  #     run: |
+  #       gem install fastlane
+  #       fastlane run match import ...
+  #       fastlane run gym export_method:app-store ...
+  #     env:
+  #       MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+  #
+  # ============================================================
