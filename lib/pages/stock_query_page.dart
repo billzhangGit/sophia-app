@@ -877,7 +877,7 @@ class _StockQueryPageState extends State<StockQueryPage> {
                         color: AppTheme.lifecycleColor(lc.phase),
                         fontWeight: FontWeight.bold,
                         fontSize: 15)),
-                if (lc.detail != null && lc.detail.isNotEmpty) ...[
+                if (lc.detail.isNotEmpty) ...[
                   const SizedBox(width: 8),
                   Text('(${lc.detail})',
                       style: TextStyle(
