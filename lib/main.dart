@@ -4,6 +4,8 @@ import 'widgets/app_theme.dart';
 import 'pages/review_page.dart';
 import 'pages/dragon_page.dart';
 import 'pages/stock_query_page.dart';
+import 'pages/chat_page.dart';
+import 'pages/portfolio_page.dart';
 import 'pages/login_page.dart';
 import 'pages/profile_page.dart';
 
@@ -111,7 +113,7 @@ class _AuthGateState extends State<AuthGate> {
   }
 }
 
-/// 主页 — 3 个 Tab
+/// 主页 — 5 个 Tab
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -155,7 +157,7 @@ class _HomePageState extends State<HomePage> {
     final isVip = _auth.isVip;
 
     return DefaultTabController(
-      length: 3,
+      length: 5,
       child: Scaffold(
         backgroundColor: AppTheme.bg,
         appBar: AppBar(
@@ -194,10 +196,13 @@ class _HomePageState extends State<HomePage> {
             indicatorColor: AppTheme.up,
             labelColor: AppTheme.up,
             unselectedLabelColor: AppTheme.textDim,
+            isScrollable: true,
             tabs: [
               Tab(icon: Icon(Icons.bar_chart), text: '复盘'),
               Tab(icon: Icon(Icons.trending_up), text: '龙头选股'),
               Tab(icon: Icon(Icons.shopping_cart), text: '买卖决策'),
+              Tab(icon: Icon(Icons.chat), text: '对话'),
+              Tab(icon: Icon(Icons.account_balance_wallet), text: '持仓'),
             ],
           ),
         ),
@@ -217,6 +222,20 @@ class _HomePageState extends State<HomePage> {
                     icon: Icons.shopping_cart,
                     title: '买卖决策',
                     description: '个股深度分析 × 五维评分\n实时买卖策略与退出规则',
+                  ),
+            isVip
+                ? const ChatPage()
+                : _VipLockPage(
+                    icon: Icons.chat,
+                    title: '对话',
+                    description: '跟Alex聊个股和市场',
+                  ),
+            isVip
+                ? const PortfolioPage()
+                : _VipLockPage(
+                    icon: Icons.account_balance_wallet,
+                    title: '持仓',
+                    description: '管理交易记录与盈亏',
                   ),
           ],
         ),

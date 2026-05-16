@@ -22,4 +22,22 @@ class AppConfig {
   static const String authLogin = '/api/auth/login';
   static const String authMe = '/api/auth/me';
   static const String health = '/health';
+
+  // ============================================================
+  // 对话（VIP）
+  // ============================================================
+  static const String chatAsk = '/api/chat/ask';
+  static const String chatSessions = '/api/chat/sessions';
+  static const String chatCreateSession = '/api/chat/sessions';
+  static const String chatMessages = '/api/chat/sessions';  // + /{id}/messages
+
+  // ============================================================
+  // 持仓管理（VIP）
+  // ============================================================
+  static const String portfolioList = '/api/portfolio/list';
+  static const String portfolioAdd = '/api/portfolio/add';
+  static const String portfolioUpdate = '/api/portfolio';      // + /{id}
+  static const String portfolioDelete = '/api/portfolio';      // + /{id}
+  static const String portfolioPerformance = '/api/portfolio'; // + /{id}/performance
+  static const String portfolioOverview = '/api/portfolio/overview';
 }
