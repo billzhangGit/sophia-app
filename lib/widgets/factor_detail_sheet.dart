@@ -186,6 +186,20 @@ class FactorDetailSheet extends StatelessWidget {
       'volatility': '波动率',
       'trend': '趋势',
       'risk': '风险',
+      'height_score': '连板高度',
+      'heat_score': '热度分',
+      'gap_score': '竞价分',
+      'sector_score': '板块共振',
+      'recognition_score': '辨识度',
+      'volume_score': '量价分',
+      'ladder_score': '梯队分',
+      'break_type_score': '断板类型',
+      'nwave_score': 'N字/二波',
+      'cgo_score': 'CGO处置',
+      'concept_diff_adj': '概念预期差',
+      'market_multiplier': '市场乘数',
+      'sentiment_boost': '情绪增强',
+      'consecutive': '连板数',
     };
     return labelMap[key] ?? key;
   }

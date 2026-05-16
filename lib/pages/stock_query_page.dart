@@ -436,8 +436,8 @@ class _StockQueryPageState extends State<StockQueryPage> {
             SellStrategyCard(strategies: a.sellStrategies),
           ],
 
-          // ----- ⑥-② 信号因子评分（来源：信号文件） -----
-          if (a.sentimentSignal?.signalDetails != null && a.sentimentSignal!.inSignal) ...[
+          // ----- ⑥-② 信号因子评分（来源：信号文件或实时计算） -----
+          if (a.sentimentSignal?.signalDetails != null && (a.sentimentSignal!.inSignal || a.sentimentSignal!.signalScore > 0)) ...[
             _buildSignalFactorTable(a.sentimentSignal!.signalDetails!,
                 a.sentimentSignal!.signalRank, a.sentimentSignal!.signalScore),
             const SizedBox(height: AppTheme.pad),
