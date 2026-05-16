@@ -1,7 +1,7 @@
 /// Sophia API 配置
 class AppConfig {
   // 服务器地址 — 上线后改为正式域名
-  static const String baseUrl = 'https://101.35.228.36';
+  static const String baseUrl = 'http://101.35.228.36';
 
   // API路径
   static const String marketOverview = '/api/market/overview';
